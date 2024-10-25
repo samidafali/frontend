@@ -2,63 +2,65 @@ import { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useParams, useNavigate } from 'react-router-dom';
+import success from '../../images/success.png';
 
 const PaymentPage = () => {
-  const { courseId } = useParams(); // Get courseId from the URL
+  const { courseId } = useParams();
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // State for success message
+  const [successMessage, setSuccessMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showSuccessImage, setShowSuccessImage] = useState(false);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token"); // Get token from localStorage
+  const token = localStorage.getItem("token");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsProcessing(true);
-  
+
     if (!stripe || !elements) {
       setErrorMessage("Stripe.js hasn't loaded yet.");
       return;
     }
-  
+
     const cardElement = elements.getElement(CardElement);
-  
+
     try {
       console.log("Sending request to backend to create checkout session...");
       const response = await axios.post(
-        `http://localhost:8050/api/courses/${courseId}/create-checkout-session`, // Ensure this matches your backend
+        `http://localhost:8050/api/courses/${courseId}/create-checkout-session`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Ensure the token is sent
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-  
+
       console.log("Response from backend:", response.data);
-  
+
       const { clientSecret } = response.data;
-  
-      // Confirm the payment using Stripe's API
+
       const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: cardElement,
         },
       });
-  
+
       if (error) {
         console.log("Payment error:", error.message);
         setErrorMessage(error.message);
         setIsProcessing(false);
       } else if (paymentIntent.status === 'succeeded') {
         console.log("Payment succeeded:", paymentIntent.id);
-        setSuccessMessage("Payment successful! Redirecting to dashboard...");
+        setSuccessMessage("Payment successful!");
+        setShowSuccessImage(true);
         
-        // Delay redirection to show the success message
+        // Redirection après 3 secondes
         setTimeout(() => {
-          navigate(`/studentdashboard`); // Redirect after 3 seconds
+          navigate(`/studentdashboard`);
         }, 3000);
       }
     } catch (error) {
@@ -67,7 +69,7 @@ const PaymentPage = () => {
       setIsProcessing(false);
     }
   };
-  
+
   // Inline CSS for styling the form and elements
   const styles = {
     container: {
@@ -117,9 +119,6 @@ const PaymentPage = () => {
       backgroundColor: '#cccccc',
       cursor: 'not-allowed',
     },
-    buttonHover: {
-      backgroundColor: '#45a049',
-    },
     error: {
       color: '#e74c3c',
       fontSize: '14px',
@@ -134,6 +133,12 @@ const PaymentPage = () => {
       marginBottom: '20px',
       textAlign: 'center',
     },
+    successImage: {
+      width: '100%', // Adjust the width as needed
+      marginBottom: '20px',
+      borderRadius: '5px', // Optional: round the corners
+      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', // Optional: add shadow
+    },
   };
 
   return (
@@ -144,6 +149,9 @@ const PaymentPage = () => {
           <CardElement style={styles.stripeElement} />
           {errorMessage && <div style={styles.error}>{errorMessage}</div>}
           {successMessage && <div style={styles.success}>{successMessage}</div>}
+          
+          {showSuccessImage && <img src={success} alt="Success" style={styles.successImage} />} {/* Image de succès */}
+          
           <button 
             type="submit" 
             style={isProcessing ? { ...styles.button, ...styles.buttonDisabled } : styles.button}
