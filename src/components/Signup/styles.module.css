@@ -1,0 +1,243 @@
+.signup_container {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #d7ecff 30%, #c3e8ff); /* Gradient background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.signup_form_container {
+    width: 900px;
+    height: 500px;
+    display: flex;
+    border-radius: 15px; /* Rounded corners for a modern look */
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    background-color: white;
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slide-in 1s ease-out forwards, fade-in 1s ease-in forwards; /* Animation */
+}
+
+/* Slide-in animation */
+@keyframes slide-in {
+    from {
+        transform: translateX(-50px); /* Start from left */
+    }
+    to {
+        transform: translateX(0); /* Move to original position */
+    }
+}
+
+/* Fade-in animation */
+@keyframes fade-in {
+    from {
+        opacity: 0; /* Start invisible */
+    }
+    to {
+        opacity: 1; /* Become visible */
+    }
+}
+
+.left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #1c1c1c; /* Dark background for contrast */
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.left h1 {
+    margin-top: 0;
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 1.5px; /* Better spacing for a clean look */
+    text-shadow: 0 4px 10px rgba(255, 255, 255, 0.3); /* Light text shadow */
+}
+
+.right {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.form_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation: fade-in 1.5s ease-in forwards; 
+    animation-delay: 0.5s; /* Delay for the form animation */
+}
+
+.form_container h1 {
+    font-size: 36px;
+    color: #333; /* Dark color for contrast */
+    margin-bottom: 20px;
+    letter-spacing: 1px; /* Added spacing for title */
+}
+
+/* Enhanced input fields */
+.input {
+    outline: none;
+    border: 2px solid #007bff; /* Blue border */
+    width: 370px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.input:focus {
+    border-color: #0056b3; /* Darker blue on focus */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow on focus */
+    transform: scale(1.02); /* Slight scale on focus */
+}
+
+.error_msg,
+.success_msg {
+    width: 370px;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 14px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.error_msg {
+    background-color: #ff4d4d; /* Red for errors */
+    color: white;
+}
+
+.success_msg {
+    background-color: #4caf50; /* Green for success */
+    color: white;
+}
+
+/* Styled buttons */
+.white_btn,
+.green_btn {
+    border: none;
+    outline: none;
+    padding: 12px 0;
+    width: 180px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 30px; /* Rounded for modern style */
+    transition: all 0.3s ease;
+}
+
+.white_btn {
+    background-color: white;
+    color: black;
+    border: 2px solid black; /* Border for white button */
+}
+
+.white_btn:hover {
+    background-color: black;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.green_btn {
+    background-color: #007bff; /* Blue color */
+    color: white;
+}
+
+.green_btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+}
+
+/* Container for the role selection */
+.role_container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.role_container label {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #333; /* Dark color for readability */
+    transition: color 0.3s ease;
+}
+
+.role_container input[type="radio"] {
+    display: none; /* Hide default radio button */
+}
+
+.role_container input[type="radio"] + span {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border: 2px solid #ccc; /* Light border for custom radio */
+    border-radius: 50%; /* Circle shape */
+    position: relative;
+    transition: all 0.4s ease;
+    background: linear-gradient(135deg, #f0f0f0, #d9d9d9); /* Gradient background */
+}
+
+.role_container input[type="radio"]:checked + span {
+    border-color: #007bff; /* Blue border when checked */
+    background: radial-gradient(circle at center, #007bff 40%, #333 100%); /* Darker center when checked */
+}
+
+.role_container input[type="radio"]:checked + span::before {
+    content: "";
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: white; /* White center for checked state */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.role_container label:hover span {
+    border-color: #007bff; /* Change border color on hover */
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Light blue shadow */
+}
+
+.role_container label:hover {
+    color: #007bff; /* Change text color on hover */
+}
+
+.role_container input[type="radio"]:checked + span::before {
+    animation: pulse 0.4s ease forwards; /* Animation on checked */
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
