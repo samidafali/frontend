@@ -4,6 +4,7 @@ import axios from 'axios';
 const Quiz = ({ courseId, category }) => {
     const [questions, setQuestions] = useState([]);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); // Loading indicator
     const [selectedOptions, setSelectedOptions] = useState({});
     const [submitted, setSubmitted] = useState(false);
     const [results, setResults] = useState([]); // Stores result feedback for each question
@@ -12,10 +13,14 @@ const Quiz = ({ courseId, category }) => {
 
     useEffect(() => {
         const fetchQuiz = async () => {
+            setLoading(true); // Start loading
             try {
-                const response = await axios.post(`${process.env.REACT_APP_QUIZ_BASE_URL}/chat/${courseId}`, {
-                    question: "Generate quiz questions for this course."
-                });
+                const response = await axios.post(
+                    `${process.env.REACT_APP_QUIZ_BASE_URL}/chat/${courseId}`,
+                    { question: "Generate quiz questions for this course." },
+                    { timeout: 350000 } // 15 seconds timeout
+                );
+                console.log("Quiz response data:", response.data); // Debug log
 
                 if (response.data && response.data.mcqs && response.data.mcqs.length > 0) {
                     setQuestions(response.data.mcqs);
@@ -25,7 +30,9 @@ const Quiz = ({ courseId, category }) => {
                 }
             } catch (err) {
                 setError('Failed to fetch quiz questions.');
-                console.error(err);
+                console.error("Error fetching quiz:", err);
+            } finally {
+                setLoading(false); // Stop loading
             }
         };
 
@@ -41,7 +48,7 @@ const Quiz = ({ courseId, category }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         // Calculate the results and score
         const calculatedResults = questions.map((q, index) => {
             const userAnswer = selectedOptions[index];
@@ -53,27 +60,24 @@ const Quiz = ({ courseId, category }) => {
                 isCorrect
             };
         });
-    
+
         const totalScore = calculatedResults.reduce((acc, result) => acc + (result.isCorrect ? 1 : 0), 0);
-    
+
         setResults(calculatedResults); // Store the results
         setScore(totalScore); // Store the score out of 10
         setSubmitted(true); // Set submitted state to true
-    
+
         // Fetch recommended courses based on the score and category
         try {
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/recommendations`, {
                 params: { score: totalScore, category }
             });
-            console.log("Recommended courses response:", response.data.data);
+            console.log("Recommended courses response:", response.data.data); // Debug log
             setRecommendedCourses(response.data.data);
         } catch (err) {
             console.error("Failed to fetch recommendations:", err);
         }
     };
-    
-
-    
 
     // Styles
     const styles = {
@@ -172,7 +176,9 @@ const Quiz = ({ courseId, category }) => {
         <div style={styles.quizContainer}>
             <h2 style={styles.heading}>Quiz for Course ID: {courseId}</h2>
             {error && <div style={styles.errorMsg}>{error}</div>}
-            {submitted ? (
+            {loading ? (
+                <p>Loading quiz questions, please wait...</p>
+            ) : submitted ? (
                 <div>
                     <h3 style={styles.heading}>Quiz Results</h3>
                     {results.map((result, index) => (
