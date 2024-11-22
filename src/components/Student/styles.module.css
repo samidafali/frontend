@@ -292,3 +292,94 @@ button:hover {
         padding: 10px; /* Reduce padding on smaller screens */
     }
 }
+
+
+/* Messages Section */
+.messages_section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading for messages */
+.messages_section h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Individual message styling */
+.messages_list {
+    list-style: none;
+    padding: 0;
+}
+
+.messages_list li {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.messages_list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Message content */
+.messages_list li p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #444;
+}
+
+/* PDF link styling */
+.messages_list li a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.messages_list li a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Timestamp */
+.messages_list li em {
+    font-size: 12px;
+    color: #999;
+    display: block;
+    margin-top: 10px;
+    text-align: right;
+}
+
+/* Buttons */
+.view_messages_btn,
+.send_message_btn {
+    display: block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.view_messages_btn:hover,
+.send_message_btn:hover {
+    background-color: #0056b3;
+}

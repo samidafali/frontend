@@ -84,6 +84,9 @@ const Main = ({ isHome }) => {
                             <li>
                                 <Link to="/admin-create-course">Create Course</Link>
                             </li>
+                            <li>
+                                <Link to="/admin-stats">Stats</Link>
+                            </li>
                             
                         </>
                     )}
@@ -97,6 +100,9 @@ const Main = ({ isHome }) => {
                             </li>
                             <li>
                                 <Link to="/teacher-create-course">Create Course</Link>
+                            </li>
+                            <li>
+                                <Link to="/teacher-message">message</Link>
                             </li>
                         </>
                     )}

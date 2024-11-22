@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './styles.module.css';
 import Main from '../Main/Main';
-import ChatWithCourse from './ChatWithCourse'; // Import the ChatWithCourse component
-import Quiz from './Quiz'; // Import the Quiz component
+import ChatWithCourse from './ChatWithCourse'; // ChatPDF functionality
+import Quiz from './Quiz'; // Quiz functionality
 import Footer from '../Footer/Footer';
 
 const MyCourses = () => {
-  const [courses, setCourses] = useState([]); // State to store enrolled courses
-  const [videosVisibility, setVideosVisibility] = useState({}); // State to store visibility of videos
-  const [selectedCourseId, setSelectedCourseId] = useState(null); // State for selected course in fullscreen
-  const [error, setError] = useState(""); // Error message state
-  const [success, setSuccess] = useState(""); // Success message state
-  const [showQuiz, setShowQuiz] = useState(false); // State to manage quiz visibility
+  const [courses, setCourses] = useState([]);
+  const [videosVisibility, setVideosVisibility] = useState({});
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [messageContent, setMessageContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const studentId = localStorage.getItem("studentId");
   const token = localStorage.getItem("token");
@@ -20,15 +23,18 @@ const MyCourses = () => {
   // Fetch enrolled courses for the student
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/students/${studentId}/courses`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCourses(response.data.data || []); // Update state with enrolled courses
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/students/${studentId}/courses`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setCourses(response.data.data || []);
         setError("");
       } catch (error) {
-        console.error("Error fetching enrolled courses:", error);
         setError("Failed to fetch your courses.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -38,38 +44,75 @@ const MyCourses = () => {
   // Fetch videos for a specific course
   const fetchVideosForCourse = async (courseId) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/${courseId}/videos`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/${courseId}/videos`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       return response.data.videos;
-    } catch (error) {
+    } catch {
       setError("Failed to fetch course videos.");
       return [];
     }
   };
 
-  // Toggle videos visibility for a course and switch to full screen view
+  // Handle course selection and fetch videos
   const handleSelectCourse = async (courseId) => {
     if (!videosVisibility[courseId]) {
       const videos = await fetchVideosForCourse(courseId);
       setVideosVisibility((prevState) => ({
         ...prevState,
-        [courseId]: videos, // Set the fetched videos for the course
+        [courseId]: videos,
       }));
-      setSuccess("Videos fetched successfully!");
+      setSuccess("!");
     }
-    setSelectedCourseId(courseId); // Set the selected course to full screen
+    setSelectedCourseId(courseId);
+    setShowQuiz(false); // Hide quiz when viewing a course
   };
 
   const handleBackToCourses = () => {
-    setSelectedCourseId(null); // Deselect the course and show all courses
+    setSelectedCourseId(null);
     setShowQuiz(false); // Hide quiz when going back
   };
 
-  // Handle quiz visibility
   const handleShowQuiz = () => {
     setShowQuiz(true); // Show quiz when selected
   };
+
+  // Fetch messages for the selected course and teacher
+  const fetchMessagesFromTeacher = async (courseId, teacherId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/messages/student/${courseId}/${teacherId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setMessages(response.data.messages || []);
+      setError("");
+    } catch {
+      setError("Failed to fetch messages from the teacher.");
+    }
+  };
+
+  // Send a message to a teacher
+  const sendMessage = async (courseId, teacherId) => {
+    if (!messageContent.trim()) {
+      setError("Message content cannot be empty.");
+      return;
+    }
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/messages`,
+        { courseId, teacherId, content: messageContent },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setSuccess("Message sent successfully!");
+      setMessageContent("");
+      fetchMessagesFromTeacher(courseId, teacherId);
+    } catch {
+      setError("Failed to send the message.");
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div>
@@ -84,36 +127,29 @@ const MyCourses = () => {
           {courses.map((course) => (
             <div
               key={course._id}
-              className={`${styles.course_item} ${selectedCourseId && selectedCourseId !== course._id ? styles.hide : ''} ${selectedCourseId === course._id ? styles.fullscreen : ''}`}
+              className={`${styles.course_item} ${
+                selectedCourseId && selectedCourseId !== course._id ? styles.hide : ''
+              } ${selectedCourseId === course._id ? styles.fullscreen : ''}`}
             >
               <h3>{course.coursename}</h3>
               <p>{course.description}</p>
-
-              {/* Add course image */}
-              {course.imageUrl && (
-                <img 
-                  src={course.imageUrl} 
-                  alt={course.coursename} 
-                  className={styles.course_image} 
-                />
-              )}
-
-              {/* Show PDF link if available */}
+              {course.imageUrl && <img src={course.imageUrl} alt={course.coursename} className={styles.course_image} />}
               {course.pdfUrl && (
                 <div>
-                  <a href={course.pdfUrl} target="_blank" rel="noopener noreferrer">Download Course PDF</a>
+                  <a href={course.pdfUrl} target="_blank" rel="noopener noreferrer">
+                    Download Course PDF
+                  </a>
                 </div>
               )}
-
-              {/* Include the ChatWithCourse component for this course */}
-              {course.pdfUrl && (
-                <div className={styles.chat_section}>
-                  <ChatWithCourse courseId={course._id} /> {/* Pass the course ID to the chatbot */}
-                </div>
+              {course.enrolledteacher && course.enrolledteacher.length > 0 ? (
+                <p>
+                  <strong>Teacher:</strong> {`${course.enrolledteacher[0].firstName} ${course.enrolledteacher[0].lastName}`}
+                </p>
+              ) : (
+                <p className={styles.error_msg}>No teacher assigned to this course.</p>
               )}
 
-              {/* Button to view course in full screen */}
-              {!selectedCourseId && (
+              {selectedCourseId !== course._id && (
                 <button
                   className={styles.toggle_videos_btn}
                   onClick={() => handleSelectCourse(course._id)}
@@ -122,41 +158,96 @@ const MyCourses = () => {
                 </button>
               )}
 
-              {/* Display videos if this course is selected */}
               {selectedCourseId === course._id && (
-                <div>
+                <>
                   <div className={styles.video_section}>
                     <h4>Course Videos</h4>
-                    {videosVisibility[course._id].map((video, index) => (
-                      <div key={index} className={styles.video_item}>
+                    {videosVisibility[course._id]?.map((video, index) => (
+                      <div key={index}>
                         <h4>{video.title}</h4>
                         <video controls>
                           <source src={video.url} type="video/mp4" />
-                          Your browser does not support the video tag.
                         </video>
                       </div>
                     ))}
+                    <button className={styles.back_btn} onClick={handleBackToCourses}>
+                      Back to Courses
+                    </button>
                   </div>
-                  {/* Button to go back to the normal course view */}
-                  <button className={styles.back_btn} onClick={handleBackToCourses}>
-                    Back to Courses
-                  </button>
-                  {/* Button to show quiz */}
+
+                  <div className={styles.chat_section}>
+                    <ChatWithCourse courseId={course._id} />
+                  </div>
+
+                  <div className={styles.messaging_section}>
+                    <h4>Message Teacher</h4>
+                    <textarea
+                      placeholder="Type your message..."
+                      value={messageContent}
+                      onChange={(e) => setMessageContent(e.target.value)}
+                      className={styles.textarea}
+                    />
+                    <button
+                      onClick={() =>
+                        course.enrolledteacher && course.enrolledteacher[0]
+                          ? sendMessage(course._id, course.enrolledteacher[0]._id)
+                          : setError("No teacher assigned to this course.")
+                      }
+                      className={styles.send_message_btn}
+                    >
+                      Send Message
+                    </button>
+                  </div>
+
+                  <div className={styles.messages_section}>
+                    <h4>Messages from Teacher</h4>
+                    <button
+                      onClick={() =>
+                        course.enrolledteacher && course.enrolledteacher[0]
+                          ? fetchMessagesFromTeacher(course._id, course.enrolledteacher[0]._id)
+                          : setError("No teacher assigned to this course.")
+                      }
+                      className={styles.view_messages_btn}
+                    >
+                      View Messages
+                    </button>
+
+                    {messages.length > 0 ? (
+                      <ul className={styles.messages_list}>
+                        {messages.map((message) => (
+                          <li key={message._id}>
+                            <p><strong>Message:</strong> {message.content}</p>
+                            {message.pdfUrl && (
+                              <p>
+                                <strong>Attachment:</strong>{" "}
+                                <a href={message.pdfUrl} target="_blank" rel="noopener noreferrer">
+                                  View PDF
+                                </a>
+                              </p>
+                            )}
+                            <p><em>Sent at: {new Date(message.timestamp).toLocaleString()}</em></p>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>No messages received from the teacher yet.</p>
+                    )}
+                  </div>
+
                   <button className={styles.quiz_btn} onClick={handleShowQuiz}>
                     Take Quiz
                   </button>
-                </div>
+                </>
               )}
             </div>
           ))}
         </div>
 
-        {/* Show Quiz if selected */}
         {showQuiz && selectedCourseId && (
-          <Quiz courseId={selectedCourseId} /> // Pass the selected course ID to Quiz component
+          <Quiz courseId={selectedCourseId} />
         )}
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

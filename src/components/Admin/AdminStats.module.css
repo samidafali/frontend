@@ -1,0 +1,41 @@
+.statsContainer {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.statsCard {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.categoryBreakdown,
+.topCourses {
+  margin-bottom: 20px;
+}
+
+.charts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chartImage {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.insights {
+  background-color: #eef6f9;
+  padding: 15px;
+  border-radius: 10px;
+}
