@@ -141,28 +141,43 @@
 
 
 /* Main container for courses */
+/* Global container for courses */
 .courses_container {
     width: 90%;
     margin: 2rem auto;
-    background-color: #f9f9f9;
+    background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    font-family: "Poppins", sans-serif;
 }
 
 /* Title styling */
 .courses_container h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
     text-align: center;
-    color: #333;
-    font-weight: bold;
-    border-bottom: 2px solid #00acee;
-    padding-bottom: 10px;
+    color: #34495e;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.courses_container h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    margin: 10px auto;
+    border-radius: 2px;
 }
 
 /* Courses list */
 .courses_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -170,150 +185,241 @@
 
 /* Individual course items */
 .course_item {
+    background: linear-gradient(to bottom right, #ffffff, #f1f2f6);
+    border-radius: 16px;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .course_item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Decorative gradient overlay */
+.course_item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    z-index: 1;
 }
 
 /* Course name styling */
 .course_item h3 {
-    font-size: 1.6rem;
-    color: #333;
-    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-transform: capitalize;
 }
 
-/* Course description and schedule */
+/* Course description and details */
 .course_item p {
-    color: #555;
+    color: #7f8c8d;
     margin-bottom: 0.5rem;
     font-size: 1rem;
     line-height: 1.5;
 }
 
-/* Button styling for actions (approve/delete) */
+.course_item p span {
+    font-weight: bold;
+    color: #34495e;
+}
+
+/* Action buttons */
 .course_item button {
-    padding: 0.5rem 1rem;
+    padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
+    transition: all 0.3s ease;
     margin-right: 10px;
-    transition: background-color 0.3s ease;
 }
 
 /* Approve button */
-.course_item .approve_btn {
-    background-color: #4CAF50;
+.approve_btn {
+    background: linear-gradient(to right, #36d1dc, #5b86e5);
     color: white;
+    box-shadow: 0 4px 10px rgba(91, 134, 229, 0.3);
 }
 
-.course_item .approve_btn:hover {
-    background-color: #45a049;
+.approve_btn:hover {
+    background: linear-gradient(to right, #34ace0, #227093);
+    box-shadow: 0 6px 15px rgba(91, 134, 229, 0.5);
+    transform: translateY(-3px);
+}
+
+/* Reject button */
+.reject_btn {
+    background: linear-gradient(to right, #ff6b6b, #ff4757);
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+}
+
+.reject_btn:hover {
+    background: linear-gradient(to right, #ff4e50, #f85032);
+    box-shadow: 0 6px 15px rgba(255, 107, 107, 0.5);
+    transform: translateY(-3px);
 }
 
 /* Delete button */
-.course_item .delete_btn {
-    background-color: #f44336;
-    color: white;
+.delete_btn {
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    color: #2c3e50;
+    box-shadow: 0 4px 10px rgba(250, 208, 196, 0.3);
 }
 
-.course_item .delete_btn:hover {
-    background-color: #d32f2f;
+.delete_btn:hover {
+    background: linear-gradient(to right, #ff6b6b, #f1c40f);
+    box-shadow: 0 6px 15px rgba(250, 208, 196, 0.5);
+    transform: translateY(-3px);
 }
 
-/* No courses available message */
-.courses_container p {
-    text-align: center;
-    color: #999;
+/* Success message styling */
+.success_message {
+    background: #d4edda;
+    color: #155724;
     font-size: 1.2rem;
-    margin-top: 2rem;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0;
+    box-shadow: 0 4px 10px rgba(72, 239, 128, 0.2);
 }
 
-/* Add some spacing and structure between elements */
-.courses_list li + li {
-    margin-top: 1.5rem;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .courses_list {
+        grid-template-columns: 1fr;
+    }
 }
 
 
-/* Container for course update form */
-.update_course_container {
-    width: 80%;
+.coursesContainer {
+    width: 90%;
     margin: 2rem auto;
-    background-color: #f5f5f5;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
   }
   
-  /* Title styling */
-  .update_course_container h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
+  h2 {
     text-align: center;
     color: #333;
+  }
+  
+  .successMessage {
+    color: green;
+    text-align: center;
+    margin: 1rem 0;
+  }
+  
+  .courseGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .courseCard {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .courseCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .courseTitle {
+    font-size: 1.5rem;
+    color: #444;
+  }
+  
+  .courseDescription {
+    margin: 0.5rem 0;
+    color: #666;
+  }
+  
+  .imageContainer {
+    text-align: center;
+    margin: 1rem 0;
+  }
+  
+  .courseImage {
+    max-width: 100%;
+    border-radius: 5px;
+  }
+  
+  .pdfLink {
+    color: #007bff;
+    text-decoration: none;
     font-weight: bold;
-    border-bottom: 2px solid #00acee;
-    padding-bottom: 10px;
   }
   
-  /* Form inputs styling */
-  .update_course_container input[type="text"],
-  .update_course_container textarea {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1.2rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+  .pdfLink:hover {
+    text-decoration: underline;
   }
   
-  /* Focus state for inputs */
-  .update_course_container input[type="text"]:focus,
-  .update_course_container textarea:focus {
-    border-color: #00acee;
-    outline: none;
+  .actionButtons {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
   }
   
-  /* Dropdown styling */
-  .update_course_container select {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1.2rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-  }
-  
-  .update_course_container select:focus {
-    border-color: #00acee;
-    outline: none;
-  }
-  
-  /* Submit button styling */
-  .update_course_container button[type="submit"] {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #4CAF50;
-    color: white;
+  .approveBtn {
+    background: #28a745;
+    color: #fff;
     border: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease;
   }
   
-  .update_course_container button[type="submit"]:hover {
-    background-color: #45a049;
+  .approveBtn:hover {
+    background: #218838;
   }
+  
+  .rejectBtn {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .rejectBtn:hover {
+    background: #c82333;
+  }
+  
+  .deleteBtn {
+    background: #ffc107;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .deleteBtn:hover {
+    background: #e0a800;
+  }
+  
   
   /* Error message styling */
   .error_msg {
@@ -331,6 +437,73 @@
       width: 95%;
       padding: 1.5rem;
     }
+  }
+  .container {
+    width: 90%;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    font-family: "Poppins", sans-serif;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    color: #34495e;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .dropdown,
+  .input,
+  .textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  .dropdown {
+    background: #f9f9f9;
+  }
+  
+  .textarea {
+    height: 100px;
+  }
+  
+  .inputGroup {
+    margin-bottom: 1.5rem;
+  }
+  
+  .successMessage {
+    color: green;
+    margin: 1rem 0;
+  }
+  
+  .errorMessage {
+    color: red;
+    margin: 1rem 0;
+  }
+  
+  .addButton,
+  .submitButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+  }
+  
+  .addButton {
+    background: #3498db;
+  }
+  
+  .submitButton {
+    background: #2ecc71;
   }
   
   /* Dropdown styles */

@@ -2,167 +2,124 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
+
 const Login = () => {
-	const [data, setData] = useState({ email: "", password: "" });
-	const [role, setRole] = useState("user"); // Default role is user
-	const [error, setError] = useState("");
-	const [success, setSuccess] = useState(""); // State for success message
+    const [data, setData] = useState({ email: "", password: "" });
+    const [role, setRole] = useState("user");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
-	// Handle form data change
-	const handleChange = ({ currentTarget: input }) => {
-		setData({ ...data, [input.name]: input.value });
-		setError(""); // Clear error on input change
-		setSuccess(""); // Clear success on input change
-	};
+    const handleChange = ({ currentTarget: input }) => {
+        setData({ ...data, [input.name]: input.value });
+        setError("");
+        setSuccess("");
+    };
 
-	// Handle role change (user, admin, teacher)
-	const handleRoleChange = (e) => {
-		setRole(e.target.value);
-	};
+    const handleRoleChange = (e) => {
+        setRole(e.target.value);
+    };
 
-	// Handle form submission
-// Handle form submission
-const handleSubmit = async (e) => {
-	e.preventDefault();
-	try {
-		// Select the correct URL based on role
-		const url =
-			role === "admin"
-			? `${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/login`
-			: role === "teacher"
-			? `${process.env.REACT_APP_BACKEND_BASE_URL}/api/teachers/login`
-			: `${process.env.REACT_APP_BACKEND_BASE_URL}/api/auth/login`;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const url =
+                role === "admin"
+                    ? `${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/login`
+                    : `${process.env.REACT_APP_BACKEND_BASE_URL}/api/auth/login`;
 
-		const response = await axios.post(url, data);
-		const resData = response.data;
+            const response = await axios.post(url, data);
+            const resData = response.data;
 
-		// Log the response to check where the token is stored
-		console.log(resData);
+            const token = resData.accessToken || resData.data || resData.token;
 
-		// Determine the correct token field based on response
-		const token = resData.accessToken || resData.data || resData.token;
+            if (token) {
+                localStorage.setItem("token", token);
+            } else {
+                throw new Error("Token not found in response");
+            }
 
-		// Store the token and role in localStorage
-		if (token) {
-			localStorage.setItem("token", token); // Store token (check if it's accessToken, token, or data)
-		} else {
-			throw new Error("Token not found in response");
-		}
+            localStorage.setItem("role", role);
+            if (role === "admin") localStorage.setItem("adminId", resData.adminId);
+            if (role === "user") localStorage.setItem("studentId", resData.studentId);
 
-		localStorage.setItem("role", role); // Store role
+            setSuccess("Login successful!");
+            if (role === "admin") window.location = "/";
+            if (role === "user") window.location = "/";
+        } catch (error) {
+            if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+                setError(error.response.data.message);
+                setSuccess("");
+            }
+        }
+    };
 
-		// Store the ID based on role
-		if (role === "admin") {
-			localStorage.setItem("adminId", resData.adminId);
-		} else if (role === "teacher") {
-			localStorage.setItem("teacherId", resData.teacherId);
-		} else if (role === "user") {
-			localStorage.setItem("studentId", resData.studentId);
-		}
+    return (
+        <div className={styles.login_container}>
+            <div className={styles.login_form_container}>
+                <div className={styles.left}>
+                    <form onSubmit={handleSubmit}>
+                        <h1>Login to Your Account</h1>
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            name="email"
+                            onChange={handleChange}
+                            value={data.email}
+                            required
+                            className={styles.input}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                            onChange={handleChange}
+                            value={data.password}
+                            required
+                            className={styles.input}
+                        />
 
-		setSuccess("Login successful!");
+                        <div className={styles.role_container}>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="role"
+                                    value="user"
+                                    checked={role === "user"}
+                                    onChange={handleRoleChange}
+                                />
+                                User
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="role"
+                                    value="admin"
+                                    checked={role === "admin"}
+                                    onChange={handleRoleChange}
+                                />
+                                Admin
+                            </label>
+                        </div>
 
-		// Redirect based on role
-		if (role === "admin") {
-			window.location = "/admindashboard";
-		} else if (role === "teacher") {
-			window.location = "/teacher-dashboard";
-		} else {
-			window.location = "/studentdashboard"; // Redirect for user role
-		}
-	} catch (error) {
-		if (
-			error.response &&
-			error.response.status >= 400 &&
-			error.response.status <= 500
-		) {
-			setError(error.response.data.message);
-			setSuccess("");
-		}
-	}
-};
+                        {error && <div className={styles.error_msg}>{error}</div>}
+                        {success && <div className={styles.success_msg}>{success}</div>}
 
+                        {/* Login Button */}
+                        <button type="submit" className={styles.green_btn}>
+                            Sign In
+                        </button>
 
-	return (
-		
-		<div className={styles.login_container}>
-			<div className={styles.login_form_container}>
-				<div className={styles.left}>
-					<form className={styles.form_container} onSubmit={handleSubmit}>
-						<h1>Login to Your Account</h1>
-						<input
-							type="email"
-							placeholder="Email"
-							name="email"
-							onChange={handleChange}
-							value={data.email}
-							required
-							className={styles.input}
-						/>
-						<input
-							type="password"
-							placeholder="Password"
-							name="password"
-							onChange={handleChange}
-							value={data.password}
-							required
-							className={styles.input}
-						/>
-
-						{/* Role selection for User, Admin, or Teacher */}
-						<div className={styles.role_container}>
-							<label>
-								<input
-									type="radio"
-									name="role"
-									value="user"
-									checked={role === "user"}
-									onChange={handleRoleChange}
-								/>
-								<span></span> User
-							</label>
-							<label>
-								<input
-									type="radio"
-									name="role"
-									value="admin"
-									checked={role === "admin"}
-									onChange={handleRoleChange}
-								/>
-								<span></span> Admin
-							</label>
-							<label>
-								<input
-									type="radio"
-									name="role"
-									value="teacher"
-									checked={role === "teacher"}
-									onChange={handleRoleChange}
-								/>
-								<span></span> Teacher
-							</label>
-						</div>
-
-						{/* Display success or error message */}
-						{error && <div className={styles.error_msg}>{error}</div>}
-						{success && <div className={styles.success_msg}>{success}</div>}
-
-						<button type="submit" className={styles.green_btn}>
-							Sign In
-						</button>
-					</form>
-				</div>
-				<div className={styles.right}>
-					<h1>New Here?</h1>
-					<Link to="/signup">
-						<button type="button" className={styles.white_btn}>
-							Sign Up
-						</button>
-					</Link>
-				</div>
-			</div>
-		</div>
-	);
+                        {/* Signup Button */}
+                        <Link to="/signup">
+                            <button type="button" className={styles.signup_btn}>
+                                Sign Up
+                            </button>
+                        </Link>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default Login;

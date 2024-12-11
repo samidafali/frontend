@@ -1,0 +1,119 @@
+/* Main Chat Container */
+.chatContainer {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  
+  /* Toggle Button */
+  .toggleButton {
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .toggleButton:hover {
+    background: linear-gradient(to right, #0056b3, #003c8f);
+    transform: translateY(-2px);
+  }
+  
+  /* Chat Box */
+  .chatBox {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  /* Chat Title */
+  .chatTitle {
+    font-size: 1.8rem;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  /* Form Styling */
+  .chatForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .chatInput {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  
+  .chatInput:focus {
+    border: 1px solid #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .chatButton {
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .chatButton:hover {
+    background: linear-gradient(to right, #0056b3, #003c8f);
+    transform: translateY(-2px);
+  }
+  
+  /* Loader Styling */
+  .loaderContainer {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  /* Error Message Styling */
+  .errorMessage {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* Response Container */
+  .responseContainer {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .responseTitle {
+    font-size: 1.2rem;
+    color: #1565c0;
+    margin-bottom: 10px;
+  }
+  
+  .responseText {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+  }
+  

@@ -1,0 +1,124 @@
+.payment-page-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #1e293b; /* Bleu marine */
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  font-family: 'Poppins', sans-serif;
+  color: #f1f5f9; /* Blanc cassé */
+}
+
+.title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fbbf24; /* Doré */
+}
+
+.payment-method-selector {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.payment-method-selector label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #cbd5e1; /* Gris clair */
+  transition: color 0.3s ease;
+}
+
+.payment-method-selector label:hover {
+  color: #fbbf24; /* Doré */
+}
+
+.payment-method-selector input {
+  margin-right: 10px;
+  accent-color: #fbbf24; /* Modern browsers */
+}
+
+.stripe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stripe-card-element {
+  padding: 15px;
+  border: 2px solid #334155; /* Gris foncé */
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #0f172a; /* Bleu très foncé */
+  color: #f1f5f9; /* Blanc cassé */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.3s ease;
+}
+
+.stripe-card-element:focus {
+  border-color: #fbbf24; /* Doré */
+}
+
+.submit-button {
+  padding: 15px;
+  background-color: #fbbf24; /* Doré */
+  color: #1e293b; /* Bleu marine */
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #eab308; /* Doré foncé */
+  transform: translateY(-3px);
+}
+
+.submit-button.disabled {
+  background-color: #64748b; /* Gris bleuté */
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ef4444; /* Rouge clair */
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: #22c55e; /* Vert clair */
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.PayPalButtons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .payment-page-container {
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .payment-method-selector label {
+    font-size: 1rem;
+  }
+
+  .submit-button {
+    font-size: 1rem;
+    padding: 12px;
+  }
+}

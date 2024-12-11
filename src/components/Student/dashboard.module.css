@@ -1,0 +1,151 @@
+.dashboardContainer {
+    padding: 40px;
+    background: linear-gradient(rgba(241, 70, 70, 0.6), rgba(243, 146, 146, 0.6)), url('../../images/im3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+  }
+  
+  
+  /* Autres styles restent identiques */
+  
+  
+  /* En-tête */
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #6c5ce7, #81ecec); /* Couleur d'arrière-plan vive */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header h1 {
+    font-size: 2.5rem;
+    color: white; /* Contraste élevé avec le fond */
+    margin-bottom: 10px;
+  }
+  
+  .header p {
+    font-size: 1rem;
+    color: #f5f6fa; /* Couleur plus douce */
+    margin-bottom: 20px;
+  }
+  
+  .searchInput {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 2px solid #74b9ff; /* Nouvelle bordure */
+    border-radius: 25px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .searchInput:focus {
+    border-color: #00cec9; /* Bordure plus vive au focus */
+  }
+  
+  /* Loader */
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  /* Grid des cours */
+  .gridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Carte des cours */
+  .card {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Dégradé léger et neutre */
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* En-tête de la carte */
+  .cardHeader {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+  }
+  
+  .cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .cardOverlay {
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .cardOverlay h3 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  .cardOverlay p {
+    font-size: 0.9rem;
+    margin: 5px 0 0;
+  }
+  
+  /* Corps de la carte */
+  .cardBody {
+    padding: 20px;
+    text-align: left;
+  }
+  
+  .cardBody p {
+    font-size: 0.9rem;
+    color: #636e72; /* Texte doux */
+    margin-bottom: 10px;
+  }
+  
+  .price {
+    font-size: 1.2rem;
+    color: #d63031; /* Couleur vive pour le prix */
+  }
+  
+  /* Pied de carte */
+  .cardFooter {
+    padding: 15px;
+    text-align: center;
+    background: #dfe6e9; /* Fond clair */
+  }
+  
+  .enrollBtn {
+    background: #6c5ce7; /* Couleur vive */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .enrollBtn:hover {
+    background: #00cec9; /* Animation au survol */
+  }
+  

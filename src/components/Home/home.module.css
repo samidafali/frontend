@@ -1,116 +1,170 @@
-/* home.module.css */
-
-.home_container {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #f9f9f9; /* Couleur de fond claire */
+/* Global Styles */
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    color: #333;
+    background-image: url('../../images/im89.webp'); /* Chemin vers votre image */
+    background-size: cover; /* L'image couvre tout l'écran */
+    background-position: center; /* Centre l'image */
+    background-repeat: no-repeat; /* Empêche la répétition */
+    background-attachment: fixed; /* L'image reste fixe même lorsque vous défilez */
+    line-height: 1.6;
 }
 
-.welcome_title {
-    font-size: 2.8rem; /* Augmenter la taille du texte */
-    margin-bottom: 10px;
-    color: #333; /* Couleur de texte foncé */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Ajout d'une ombre */
-}
 
-.welcome_subtitle {
-    font-size: 1.5rem; /* Agrandir le sous-titre */
-    color: #666; /* Couleur de texte gris moyen */
-    margin-bottom: 30px; /* Ajout d'un espacement */
-}
-
-.hero_section {
-    position: relative;
-    margin: 20px 0;
-}
-
-.hero_image {
-    width: 80%; /* Ajuster la largeur de l'image principale */
-    max-width: 800px; /* Limiter la largeur maximale */
-    height: auto;
-    border-radius: 8px;
-    animation: fadeIn 1s ease-in-out; /* Animation de fondu */
-}
-
-.hero_text {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-    text-align: center; /* Centrer le texte */
-}
-
-.sign_up_btn {
-    background-color: #4CAF50; /* Couleur de fond verte */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    text-decoration: none;
-}
-
-.sign_up_btn:hover {
-    background-color: #45a049; /* Vert plus foncé au survol */
-}
-
-.course_highlights {
-    margin-top: 40px; /* Augmenter l'espacement */
-}
-
-.course_card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin: 10px;
+.pageContainer {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
     padding: 20px;
-    text-align: left;
-    width: 200px; /* Largeur fixe pour les cartes de cours */
-    display: inline-block; /* Alignement horizontal des cartes */
-    transition: transform 0.2s; /* Ajout d'une animation */
 }
 
-.course_card:hover {
-    transform: scale(1.05); /* Agrandir la carte lors du survol */
+/* Header Section */
+.header {
+    text-align: center;
+    padding: 100px 20px; /* Augmentez le padding pour que l'image soit bien visible */
+    background-image: url('../../images/im88.webp'); /* Chemin relatif au dossier public */
+    background-size: cover; /* L'image couvre tout le conteneur */
+    background-position: center; /* Centre l'image */
+    background-repeat: no-repeat; /* Empêche la répétition */
+    color: #fff; /* Ajuste le texte pour qu'il soit lisible sur l'image */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ajoute une ombre pour un effet élégant */
 }
 
-/* Réduire la taille des images des cours */
-.course_image {
-    width: 100%; /* Ajuster la largeur pour occuper 100% du cadre */
-    height: auto;
-    border-radius: 8px;
+
+.mainHeading {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #ff9800; /* Orange color */
+    font-weight: bold; /* (Facultatif) Accentuer le texte */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); /* (Facultatif) Effet de lueur douce */
 }
 
-.arrow_link {
+
+.headerSubtitle {
+    font-size: 1.2rem;
+    margin-top: 0;
+    color: #100b03; /* Orange color */
+    font-weight: bold; /* (Facultatif) Accentuer le texte */
+    text-shadow: 1px 1px 5px rgba(186, 102, 102, 0.3); /* (Facultatif) Effet de lueur douce */
+}
+
+/* About Section */
+.aboutSection {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    margin-top: 30px;
-    font-size: 1.5rem;
-    color: #007BFF; /* Couleur de texte bleue */
-    text-decoration: none; /* Pas de soulignement */
-    transition: color 0.2s; /* Transition de couleur */
+    margin: 40px 0;
+    background: #ffffff50;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.arrow_link:hover {
-    color: #0056b3; /* Couleur plus foncée au survol */
+.aboutContent {
+    flex: 1 1 50%;
+    padding: 20px;
+    background: #a5ddf1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+
 }
 
-.arrow {
-    margin-right: 8px; /* Espacement entre la flèche et le texte */
+.aboutContent h2 {
+    font-size: 1.8rem;
+    color: #333;
 }
 
-/* Animation de fondu */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.aboutContent p {
+    margin: 10px 0 20px;
+}
+
+.learnMoreButton {
+    background: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.learnMoreButton:hover {
+    background: #45a049;
+}
+
+.imageContainer {
+    flex: 1 1 40%;
+    text-align: center;
+}
+
+.aboutImage {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Courses Section */
+.coursesSection {
+    text-align: center;
+    padding: 20px;
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #4caf50;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.courseCard {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.courseCard h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.courseCard p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.enrollButton {
+    background: #ff5722;
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+
+.enrollButton:hover {
+    background: #e64a19;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 10px;
+    background: #4caf50;
+    color: #fff;
+    margin-top: 40px;
+    border-radius: 5px;
+    font-size: 0.9rem;
 }

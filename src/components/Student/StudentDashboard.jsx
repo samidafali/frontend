@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Main from '../Main/Main';
 import axios from 'axios';
-import styles from './styles.module.css';
+import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
+import HashLoader from 'react-spinners/HashLoader';
+import styles from './dashboard.module.css';
 
 const StudentDashboard = () => {
-  const [student, setStudent] = useState(null); // State for student details
-  const [courses, setCourses] = useState([]); // State for courses list
-  const [error, setError] = useState(""); // Error message state
-  const [success, setSuccess] = useState(""); // Success message state
+  const [courses, setCourses] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const studentId = localStorage.getItem("studentId");
-  const token = localStorage.getItem("token");
-  
-  const navigate = useNavigate(); // Define navigate using useNavigate hook
+  const studentId = localStorage.getItem('studentId');
+  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
-  // Function to fetch courses
   const fetchCourses = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(response.data.data || []);
-      setError("");
-    } catch (error) {
-      setError("Failed to fetch courses.");
+      setFilteredCourses(response.data.data || []);
+      setError('');
+    } catch (err) {
+      console.error('Error fetching courses:', err);
+      setError("Une erreur s'est produite lors de la récupération des cours.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,75 +38,105 @@ const StudentDashboard = () => {
     fetchCourses();
   }, [token]);
 
-  // Check if the student is enrolled in the course
-  const isEnrolled = (course) => {
-    return course.enrolledUsers && Array.isArray(course.enrolledUsers) && course.enrolledUsers.includes(studentId);
-  };
+  const isEnrolled = (course) =>
+    course.enrolledUsers?.includes(studentId);
 
-  // Function to handle enrollment
   const handleEnroll = async (courseId, isFree) => {
     try {
       if (isFree) {
-        // Handle enrollment for free courses
         await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/${courseId}/enroll`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setSuccess("Successfully enrolled in course!");
-        fetchCourses(); // Refresh courses after enrollment
+        fetchCourses();
       } else {
-        // Redirect to the payment page for paid courses
         navigate(`/payment/${courseId}`);
       }
-    } catch (error) {
-      setError("Failed to enroll in the course.");
+    } catch {
+      setError("Impossible de s'inscrire au cours.");
     }
+  };
+
+  const handleSearch = (event) => {
+    const term = event.target.value.toLowerCase();
+    setSearchTerm(term);
+    setFilteredCourses(
+      courses.filter((course) =>
+        course.coursename.toLowerCase().includes(term) || 
+        course.category.toLowerCase().includes(term)
+      )
+    );
   };
 
   return (
     <div>
-      <Main /> {/* Include the main navigation */}
-      <div className={styles.dashboard_content}>
-        <h1>Student Dashboard</h1>
-        {error && <div className={styles.error_msg}>{error}</div>}
-        {success && <div className={styles.success_msg}>{success}</div>}
-
-        <h2>Available Courses</h2>
-        <div className={styles.courses_list}>
-          {courses.length === 0 && <p>No available courses at the moment.</p>}
-          {Array.isArray(courses) && courses.map((course) => (
-            <div key={course._id} className={styles.course_item}>
-              <img src={course.imageUrl} alt={course.coursename} className={styles.course_image} />
-              <h3>{course.coursename}</h3>
-              <p>{course.description}</p>
-              <p>Difficulty: {course.difficulty}</p>
-              <p>Category: {course.category}</p> {/* Always show category */}
-
-              {/* Only show price if the course is not free */}
-              {!course.isFree && <p>Price: ${course.price}</p>}
-
-              {/* If enrolled in the course */}
-              {isEnrolled(course) ? (
-                <div>
-                  <button onClick={() => navigate('/my-courses')} className={styles.enroll_btn}>
-                    Go to My Courses
-                  </button>
-                </div>
-              ) : (
-                <button onClick={() => handleEnroll(course._id, course.isFree)} className={styles.enroll_btn}>
-                  {course.isFree ? "Enroll in Course" : "Pay to Enroll"}
-                </button>
-              )}
-            </div>
-          ))}
+      <Main />
+      <div className={styles.dashboardContainer}>
+        <div className={styles.header}>
+          <h1>Explorez Nos Cours</h1>
+          <p>Apprenez quelque chose de nouveau aujourd'hui avec nos cours interactifs et engageants.</p>
+          <input
+            type="text"
+            placeholder="Rechercher un cours..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className={styles.searchInput}
+          />
         </div>
 
-     
+        {loading ? (
+          <div className={styles.loader}>
+            <HashLoader color="#007bff" size={70} />
+          </div>
+        ) : (
+          <div className={styles.content}>
+            {error && <p className={styles.error}>{error}</p>}
+            {filteredCourses.length === 0 ? (
+              <p className={styles.noCourses}>Aucun cours trouvé pour votre recherche.</p>
+            ) : (
+              <div className={styles.gridContainer}>
+                {filteredCourses.map((course) => (
+                  <div key={course._id} className={styles.card}>
+                    <div className={styles.cardHeader}>
+                      <img
+                        src={course.imageUrl || '/placeholder.jpg'}
+                        alt={course.coursename}
+                        className={styles.cardImage}
+                      />
+                      <div className={styles.cardOverlay}>
+                        <h3>{course.coursename}</h3>
+                        <p>{course.category}</p>
+                      </div>
+                    </div>
+                    <div className={styles.cardBody}>
+                      <p>{course.description.slice(0, 100)}...</p>
+                      <p><strong>Difficulté :</strong> {course.difficulty}</p>
+                      {!course.isFree && <p className={styles.price}>Prix : ${course.price}</p>}
+                    </div>
+                    <div className={styles.cardFooter}>
+                      {isEnrolled(course) ? (
+                        <button
+                          onClick={() => navigate('/my-courses')}
+                          className={styles.enrollBtn}
+                        >
+                          Accéder au Cours
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleEnroll(course._id, course.isFree)}
+                          className={styles.enrollBtn}
+                        >
+                          {course.isFree ? "S'inscrire Gratuitement" : "Payer et S'inscrire"}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
-<Footer/>
+      <Footer />
     </div>
   );
 };

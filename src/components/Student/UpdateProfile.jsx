@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
+import './UpdateProfile.css'; // Import the CSS file
 
 const UpdateProfile = () => {
   const [student, setStudent] = useState({
@@ -49,97 +50,49 @@ const UpdateProfile = () => {
     }
   };
 
-  // Inline CSS styles
-  const styles = {
-    container: {
-      padding: '20px',
-      maxWidth: '600px',
-      margin: '0 auto',
-      backgroundColor: '#f9f9f9',
-      borderRadius: '8px',
-      boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    },
-    formGroup: {
-      marginBottom: '15px',
-    },
-    label: {
-      display: 'block',
-      marginBottom: '5px',
-      fontWeight: 'bold',
-    },
-    input: {
-      width: '100%',
-      padding: '10px',
-      borderRadius: '4px',
-      border: '1px solid #ccc',
-      fontSize: '16px',
-    },
-    button: {
-      backgroundColor: '#4CAF50',
-      color: 'white',
-      padding: '10px 15px',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      fontSize: '16px',
-      marginTop: '10px',
-    },
-    buttonHover: {
-      backgroundColor: '#45a049',
-    },
-    message: {
-      color: 'green',
-      marginBottom: '15px',
-    },
-  };
-
   return (
     <div>
       <Main />
-      <div style={styles.container}>
+      <div className="container">
         <h2>Update Profile</h2>
-        {message && <p style={styles.message}>{message}</p>}
+        {message && <p className="message">{message}</p>}
         <form onSubmit={handleSubmit}>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>First Name:</label>
+          <div className="formGroup">
+            <label className="label">First Name:</label>
             <input
               type="text"
               name="firstName"
               value={student.firstName}
               onChange={handleChange}
-              style={styles.input}
+              className="input"
             />
           </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Last Name:</label>
+          <div className="formGroup">
+            <label className="label">Last Name:</label>
             <input
               type="text"
               name="lastName"
               value={student.lastName}
               onChange={handleChange}
-              style={styles.input}
+              className="input"
             />
           </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Email:</label>
+          <div className="formGroup">
+            <label className="label">Email:</label>
             <input
               type="email"
               name="email"
               value={student.email}
               disabled
-              style={styles.input}
+              className="input"
             />
           </div>
-          <button type="submit" style={styles.button}>
+          <button type="submit" className="button">
             Update Profile
           </button>
         </form>
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
-<Footer/>
+      <Footer />
     </div>
   );
 };

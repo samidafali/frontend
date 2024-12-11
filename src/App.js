@@ -23,6 +23,7 @@ import Recommendation from "./components/Student/Recommendation.jsx";
 import Home from "./components/Home/Home.jsx"; // Import Home component
 import AdminStats from "./components/Admin/AdminStats.jsx";
 import Message from "./components/Teacher/Message.jsx";
+import ContactUs from "./components/Student/ContactUs.jsx";
 function App() {
 	const user = localStorage.getItem("token");
 	const stripePromise = loadStripe('pk_test_51PgA1t2MMlJMgqqrMy2H0fyasxX68p6sYn7zJvFGBFB7xsrxBzsIgJDZg53NnlA14H59IHe5Z9eKnfXGaDAFtnS600Jd4dovCS');
@@ -46,6 +47,7 @@ function App() {
 			<Route path="/payment/:courseId" element={<PaymentPage />} /> 
 			<Route path="/my-courses" element={<MyCourses />} />{/* Add the payment page route */}
 			<Route path="/update" element={<UpdateProfile />} />{/* Add the payment page route */}
+			<Route path="/contactus" element={<ContactUs />} />{/* Add the payment page route */}
 
 {/* Admin Routes */}
 <Route path="/admin-dashboard" element={<AdminDashboard />} />

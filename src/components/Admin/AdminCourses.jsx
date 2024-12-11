@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styles from "./styles.module.css"; // Assuming you have styles for your components
+import styles from "./styles.module.css";
 
 const AdminCourses = () => {
   const [courses, setCourses] = useState([]);
-  const [successMessage, setSuccessMessage] = useState(""); // State to track success message
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Fetch all courses on component mount
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/admin/all`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((response) => {
-        setCourses(response.data.data || []); // Ensure courses is an array
+        setCourses(response.data.data || []);
       })
       .catch((error) => {
         console.error("Error fetching courses:", error);
@@ -28,17 +28,17 @@ const AdminCourses = () => {
         { isapproved },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       )
-      .then((response) => {
+      .then(() => {
         setCourses((prevCourses) =>
           prevCourses.map((course) =>
             course._id === courseId ? { ...course, isapproved } : course
           )
         );
-        setSuccessMessage(`Course ${isapproved ? 'approved' : 'rejected'} successfully!`);
+        setSuccessMessage(`Course ${isapproved ? "approved" : "rejected"} successfully!`);
         setTimeout(() => setSuccessMessage(""), 3000);
       })
       .catch((error) => {
-        console.error(`Error ${isapproved ? 'approving' : 'rejecting'} course:`, error);
+        console.error(`Error ${isapproved ? "approving" : "rejecting"} course:`, error);
       });
   };
 
@@ -46,9 +46,9 @@ const AdminCourses = () => {
   const handleDelete = (courseId) => {
     axios
       .delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/courses/${courseId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
-      .then((response) => {
+      .then(() => {
         setSuccessMessage("Course deleted successfully!");
         setCourses(courses.filter((course) => course._id !== courseId));
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -59,94 +59,79 @@ const AdminCourses = () => {
   };
 
   return (
-    <div className={styles.courses_container}>
-      <h2>All Courses</h2>
+    <div className={styles.coursesContainer}>
+      <h2>Manage Courses</h2>
 
       {/* Success message */}
-      {successMessage && <p className={styles.success_message}>{successMessage}</p>}
+      {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
 
       {courses.length > 0 ? (
-        <ul className={styles.courses_list}>
+        <div className={styles.courseGrid}>
           {courses.map((course) => (
-            <li key={course._id} className={styles.course_item}>
-              <h3>{course.coursename}</h3>
-              <p>{course.description}</p>
-
-              {/* Display difficulty level */}
-              <p>Difficulty Level: {course.difficulty}</p>
-
-              {/* Display if the course is free or has a price */}
-              {course.isFree ? (
-                <p>Course Price: Free</p>
-              ) : (
-                <p>Course Price: ${course.price}</p>
-              )}
-
-              {/* Display the course category */}
-              <p>Category: {course.category}</p>
-
+            <div key={course._id} className={styles.courseCard}>
+              <h3 className={styles.courseTitle}>{course.coursename}</h3>
+              <p className={styles.courseDescription}>{course.description}</p>
               <p>
-                Schedule:{" "}
+                <strong>Difficulty:</strong> {course.difficulty}
+              </p>
+              <p>
+                <strong>Price:</strong> {course.isFree ? "Free" : `$${course.price}`}
+              </p>
+              <p>
+                <strong>Category:</strong> {course.category}
+              </p>
+              <p>
+                <strong>Schedule:</strong>{" "}
                 {course.schedule
                   .map((s) => `${s.day}: ${s.starttime} - ${s.endtime}`)
                   .join(", ")}
               </p>
-              <p>Approved: {course.isapproved ? "Yes" : "No"}</p>
+              <p>
+                <strong>Approved:</strong> {course.isapproved ? "Yes" : "No"}
+              </p>
 
-              {/* Display the course image */}
               {course.imageUrl && (
-                <div>
-                  <h4>Course Image:</h4>
-                  <img src={course.imageUrl} alt="Course" className={styles.course_image} />
+                <div className={styles.imageContainer}>
+                  <img src={course.imageUrl} alt="Course" className={styles.courseImage} />
                 </div>
               )}
 
-              {/* Display course videos, if videoUrls is not undefined */}
-              {course.videos && course.videos.length > 0 && (
-                <div>
-                  <h4>Course Videos:</h4>
-                  {course.videos.map((video, index) => (
-                    <div key={index}>
-                      <p>{video.title}</p>
-                      <video key={index} src={video.url} controls width="300" />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Display course PDF */}
               {course.pdfUrl && (
                 <div>
-                  <h4>Course PDF:</h4>
-                  <a href={course.pdfUrl} target="_blank" rel="noopener noreferrer">
-                    Download PDF
+                  <a
+                    href={course.pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.pdfLink}
+                  >
+                    View Course PDF
                   </a>
                 </div>
               )}
 
-              {/* Approve and Reject buttons */}
-              <div>
+              <div className={styles.actionButtons}>
                 <button
                   onClick={() => handleApproveReject(course._id, true)}
-                  className={styles.approve_btn}
+                  className={styles.approveBtn}
                 >
-                  Approve Course
+                  Approve
                 </button>
                 <button
                   onClick={() => handleApproveReject(course._id, false)}
-                  className={styles.reject_btn}
+                  className={styles.rejectBtn}
                 >
-                  Reject Course
+                  Reject
+                </button>
+                <button
+                  onClick={() => handleDelete(course._id)}
+                  className={styles.deleteBtn}
+                >
+                  Delete
                 </button>
               </div>
-
-              {/* Delete button */}
-              <button onClick={() => handleDelete(course._id)} className={styles.delete_btn}>
-                Delete Course
-              </button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No courses available.</p>
       )}

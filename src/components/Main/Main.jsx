@@ -2,6 +2,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import axios from "axios";
+import logo from '../../images/logo.png';
 
 const Main = ({ isHome }) => {
     const role = localStorage.getItem("role"); // Get role from localStorage after login
@@ -56,8 +57,9 @@ const Main = ({ isHome }) => {
     return (
         <div className={styles.main_container}>
             <nav className={styles.navbar}>
-                <div className={styles.logo}>
-                    <h1>EduPlatform</h1>
+            <div className={styles.logo_container}>
+                    <img src={logo} alt="Logo" className={styles.logo_image} />
+                    <h1 className={styles.logo_text}>LearnSphere</h1>
                 </div>
                 <ul className={styles.nav_links}>
                     <li>
@@ -84,9 +86,7 @@ const Main = ({ isHome }) => {
                             <li>
                                 <Link to="/admin-create-course">Create Course</Link>
                             </li>
-                            <li>
-                                <Link to="/admin-stats">Stats</Link>
-                            </li>
+                           
                             
                         </>
                     )}
@@ -114,11 +114,12 @@ const Main = ({ isHome }) => {
                             <li>
                                 <Link to="/studentdashboard">Student Dashboard</Link>
                             </li>
-                            <li>
-                                <Link to="/recommendation">Course Recommendation</Link>
-                            </li>
+                            
                             <li>
                                 <Link to="/update">Update</Link>
+                            </li>
+                            <li>
+                                <Link to="/contactus">Contact</Link>
                             </li>
                         </>
                     )}
